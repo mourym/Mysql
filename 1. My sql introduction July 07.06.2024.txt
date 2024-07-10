@@ -1,0 +1,815 @@
+MySQL
+======
+
+
+intelligent business decisions
+stored in database
+
+
+
+download the resources
+
+
+SQL : structured query language
+
+it is the language to communicate with relational database
+
+using sql you can create databases/tables, insert records, query for data and many other database operations
+
+
+introduction to relational database
+===================================
+
+
+different types of databases are there
+
+but 
+
+we can concentrate on 
+
+flat database -- excel files, list, information abt custoerms, orders, employee , product info etc
+
+	"issue" is redundancy and repetitive data is available
+	
+	duplicates will be available
+	
+	each time cust places order we will get all information each time 
+
+for this purpose
+
+we have to use relational database and breaks down into smaller chunks 
+
+employee into separate table
+
+customer table in own list and table
+
+we need to create relationship based on common column like id 
+
+
+separate tables and relate them with common column or id
+
+
+
+why MySQL
+=========
+
+1. its a relational database management system
+2. its free or opensource
+3. cross -platform
+4. used large corporations around the world uses it
+5. easy to use
+
+
+
+
+download MySQL
+===============
+
+
+windows - MySQL.com
+
+downloads -
+
+MySQL community downloads
+
+MySQL installer for windows
+
+bigger size install it
+
+
+
+once installed
+===========
+
+
+steps to install 
+
+1. click on developer default  -- next
+
+2. execute
+
+3. go with default settings and install
+
+
+MySQL workbench interface demo
+==============================
+
+
+goto local instance -- manage server connections (icon)
+
+
+and store password in vault so that next time it wont prompts to enter password
+
+
+
+
+
+setting up the MySQL course database
+===================================
+
+download from udemy course data file
+
+create_customers_db.sql
+
+and open it and run it
+
+
+your database intro_sql will be created
+
+
+
+select all and run it
+
+and it will reflect in schema panel (refresh it)
+
+
+now we got customers, employees, orders, products tables inside database
+
+
+identifying which database to use
+============================
+
+we need to use statement
+
+open sql query
+
+
+USE intro_sql;
+
+or double click on database to make it as active database
+
+
+
+SQL SELECT Statement syntax
+=========================
+
+
+SELECT column
+
+select col1,col2,col3
+
+select col1,col2, col3 from table_name
+
+examples:
+
+	select id,company_name,country from customers;
+
+
+
+select id, company_name, country from customers;
+
+
+
+All columns
+
+
+select * from customers;
+
+
+using col name as alias
+=========================
+
+
+
+select company_name AS 'Company Name' from customers;
+
+
+using dintinct to remove duplicates
+=====================================
+
+select distinct country from customers;
+
+
+
+exercise:
+==========
+
+Create a SELECT statement that retrieves the following columns from the CUSTOMERS table.
+
+Columns
+
+id
+
+company_name (use an alias to rename to 'Company'
+
+region
+
+country
+
+phone
+
+
+
+select id,company_name as Company, region, country, phone from customers;
+
+
+
+WHERE
+-----
+
+select col1... from tablename
+where col1 = value;
+
+
+
+select id,company_name,phone from customers
+WHERE  country = 'france';
+
+
+
+filtering text vs numeric data
+=============================
+
+
+if it is numeric data
+
+no doubt quotes for numeric data
+
+
+>,<,>=,<=,<>
+
+select id,order_date,shipper,freight from orders
+WHERE freight > 100;
+
+
+
+AND and OR 
+===========
+
+
+select id,company_name,region,country from customers
+where country='USA' and region='OR';
+
+
+
+select id,order_date,shipper,freight from orders
+where order_date >= '2019-01-01' and order_date <= '2019-12-31';
+
+-- we can use between instead of above one
+select * from orders 
+where order_date between '2019-01-01' and '2019-12-31';
+
+
+-- OR Operator
+
+select region,country from customers
+where country='USA' or country='Germany';
+
+
+MYSQL COmments
+===========
+
+
+-- this is single line comment
+
+/* this is 
+multi line 
+comment 
+and this can be 
+any lines and close with */
+
+
+
+
+/* SQL WHERE CLAUSE
+
+Create a SELECT statement that retrieves the following columns from the PRODUCT table.
+
+Columns
+
+product_name (ALIAS = 'Product')
+
+category
+
+units_in_stock (ALIAS = 'Units') */
+
+select product_name, category, units_in_stock, discontinued from products
+where (category = 'Beverages' or category = 'Dairy Products') and discontinued <> 1;
+
+
+
+
+-- SELECT STATEMENT WITH WHERE CLAUSE
+SELECT product_name AS 'Product', category, units_in_stock, discontinued AS 'Units'
+FROM products
+WHERE (category = 'Beverages' AND discontinued <> 1) OR 
+(category = 'Dairy Products' AND discontinued <> 1);
+
+-- STREAMLINE THE WHERE CONDITION USING THE IN FUNCTION
+SELECT product_name AS 'Product', category, units_in_stock, discontinued AS 'Units'
+FROM products
+WHERE category IN('Beverages', 'Dairy Products') AND discontinued <> 1;
+
+
+
+
+
+
+Order BY
+==========
+
+
+order by keyword sort the data query results asc or desc
+
+select col from table_name
+order by column
+
+
+select id, company_name, country from customers
+order by country desc;
+
+
+-- sorting with multiple columns
+
+select id, company_name, country from customers
+order by country desc, company_name desc;
+
+
+
+
+Group By
+=========
+
+group by statement is used to groups rows that have the same data
+
+
+group by summarizes the data
+
+where as distinct will remove recors with same value 
+
+
+
+
+select country from customers
+group by country;
+
+select category, sum(units_in_stock) as 'Total Stock' from products
+group by category;
+
+
+
+
+select category, count(id) as 'Total Products' from products
+group by category;
+
+select category, sum(units_in_stock) as 'Total Units' from products
+group by category;
+
+select distinct(category) as 'Categories' from products;
+
+select count(distinct(category)) as 'Categories' from products;
+
+
+
+group_concat === Used to concat/combine a string of values
+
+select group_concat(distinct(category)) as 'Categories' from products;
+
+Categories
+'Beverages,Condiments,Confections,Dairy Products,Grains/Cereals,Meat/Poultry,Produce,Seafood'
+
+
+
+
+stddev -- Returns the population standard deviation
+
+
+
+select stddev(unit_price) as 'STD Deviation' from products;
+
+
+
+
+Having
+
+select category, units_in_stock from products
+where sum(units_in_stock) >100;
+
+we will not get the result here 
+
+
+
+with group by we need to use having clause for filtering the data
+
+select category, sum(units_in_stock) from products
+group by category
+having sum(units_in_stock) > 300 ;
+
+
+
+
+Create a SELECT statement that retrieves the following columns from the ORDERS table.
+
+Columns
+
+order_date (ALIAS = 'Year')
+
+freight (ALIAS = 'Freight')
+
+Once the SELECT statement is complete, add the GROUP BY to group the records by the YEAR of order_date and add a SUM to the freight column.
+
+***** You can use the YEAR function to get the YEAR from the order_date
+
+year(order_date)
+
+
+
+select year(order_date) as 'Year', sum(freight) as 'Freight' from orders
+group by year(order_date);
+
+
+
+
+-- Creating a new database
+================================
+
+create database database_new;
+
+-- CAUTION!!!! BE CAREFUL
+-- deleting the database
+
+drop database database_new;
+
+
+USE database_new;
+
+-- CREATING TABLES
+
+create table awesometable(
+	id int,
+    first_name varchar(255),
+    last_name varchar(255),
+    dept varchar(255)
+
+);
+
+
+
+
+INSERT INTO STATEMENTS
+----------------------
+
+
+
+-- insert into demo
+-- here we are not using id bcs it is set to auto_increment while creating table
+
+INSERT INTO awesome_employees(first_name, last_name, dept)
+values('Mourya', 'M', 'IT');
+
+
+select * from awesome_employees;
+
+
+
+
+-- inserting data into every column of a table
+
+-- here we need to specify id as "default" keyword bcs its auto_increment and expects each column to mention
+
+INSERT INTO awesome_employees
+values(default, 'Jamuna', 'T', 'Sales');
+
+
+
+INSERTING RECORDS
+
+ADD RECORDS
+
+Once the table has been created, add 3 records to the table using the INSERT INTO... VALUES... Statement.
+
+
+
+
+
+insert into shippers
+values(default, 'speedy expr', '503 555-9831'),
+(default, 'United Package', '503 555-3199'),
+(default, 'Federal Ship', '503 555-9931');
+
+
+select * from shippers;
+
+
+
+or we can use below also
+
+-- INSERT RECORDS INTO THE SHIPPERS TABLE
+INSERT INTO shippers (shipper_name, phone)
+VALUES ('Speedy Express', '503 555-9831'),
+('United Package', '503 555-3199'),
+('Federal Shipping', '503 555-9931');
+
+-- CHECK FOR RECORDS
+SELECT * FROM shippers;
+
+
+
+
+
+JOINS
+========
+
+1. Inner join
+
+2. Left join or left outer join
+
+3. right join or right outer join
+
+
+inner join: 
+----------
+
+matching records from employees and customers 
+
+select emp.first_name, emp.last_name, cust.company_name, cust.country
+from employees emp
+inner join customers cust 
+on emp.id = cust.employee_id;
+
+left join
+========
+
+if we want to see only employees who dont have customers then we can make use of left join
+
+
+select emp.first_name, emp.last_name, cust.company_name, cust.country
+from employees emp
+left join customers cust 
+on emp.id = cust.employee_id;
+
+
+right join
+=======
+
+if we want to see all customers and who dont have employee then we can use right join
+
+select emp.first_name, emp.last_name, cust.company_name, cust.country
+from employees emp
+right join customers cust 
+on emp.id = cust.employee_id;
+
+
+
+
+IS NULL
+========
+
+ --  when we want to get all employees which are null
+
+select emp.first_name, emp.last_name, cust.company_name, cust.country
+from employees emp
+right join customers cust 
+on emp.id = cust.employee_id
+where emp.first_name IS NULL;
+
+
+
+-- we can do left join and check where all customer are blank in company_name column
+it is very useful to use IS NULL
+
+
+
+select emp.first_name, emp.last_name, cust.company_name, cust.country
+from employees emp
+left join customers cust 
+on emp.id = cust.employee_id
+where cust.company_name IS NULL;
+
+
+
+
+
+
+
+-- Exercise
+
+
+SQL TABLE JOINS
+
+Create a SELECT Statement the combines columns from the CUSTOMERS and ORDERS tables.
+
+CUSTOMERS
+
+company_name (ALIAS = 'Company')
+
+country
+
+ORDERS
+
+order_date (ALIAS = 'Order Date')
+
+shipper
+
+freight
+
+Join the two tables as an INNER JOIN based on the id columns
+
+
+
+select cust.company_name as 'Company', cust.country,
+orders.order_date as 'Order Date', orders.shipper, orders.freight 
+from customers cust
+inner join orders
+on cust.employee_id = orders.customer_id;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
